@@ -7,104 +7,21 @@ minetest.register_on_generated(function(minp, maxp, seed)
     local area = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
     local data = vm:get_data()
 
-    local heightmap = minetest.get_perlin_map({
-        offset = 0,
-        scale = 1,
-        spread = {x = 300, y = 300, z = 300},
-        seed = 5349,
-        octaves = 6,
-        persist = 0.7
-    }, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1}):get2dMap_flat({x = minp.x, y = minp.z})
+    local function get_perlin_map(params, size)
+        return minetest.get_perlin_map(params, size):get2dMap_flat({x = minp.x, y = minp.z})
+    end
 
-    local peakmap = minetest.get_perlin_map({
-        offset = 0,
-        scale = 1,
-        spread = {x = 200, y = 200, z = 200},
-        seed = 12345,
-        octaves = 3,
-        persist = 0.5
-    }, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1}):get2dMap_flat({x = minp.x, y = minp.z})
-
-    local plainmap = minetest.get_perlin_map({
-        offset = 0,
-        scale = 1,
-        spread = {x = 1800, y = 1800, z = 1800},
-        seed = 6789,
-        octaves = 0,
-        persist = 0
-    }, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1}):get2dMap_flat({x = minp.x, y = minp.z})
-
-    local terrain_type_map = minetest.get_perlin_map({
-        offset = 0,
-        scale = 1,
-        spread = {x = 500, y = 500, z = 500},
-        seed = 7890,
-        octaves = 1,
-        persist = 0.5
-    }, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1}):get2dMap_flat({x = minp.x, y = minp.z})
-
-    local desert_map = minetest.get_perlin_map({
-        offset = 0,
-        scale = 1,
-        spread = {x = 1000, y = 1000, z = 1000},
-        seed = 8765,
-        octaves = 3,
-        persist = 0.5
-    }, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1}):get2dMap_flat({x = minp.x, y = minp.z})
-
-    local forest_map = minetest.get_perlin_map({
-        offset = 0,
-        scale = 1,
-        spread = {x = 800, y = 800, z = 800},
-        seed = 9876,
-        octaves = 3,
-        persist = 0.5
-    }, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1}):get2dMap_flat({x = minp.x, y = minp.z})
-
-    local wetland_map = minetest.get_perlin_map({
-        offset = 0,
-        scale = 1,
-        spread = {x = 1200, y = 1200, z = 1200},
-        seed = 1098,
-        octaves = 3,
-        persist = 0.5
-    }, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1}):get2dMap_flat({x = minp.x, y = minp.z})
-
-    local snow_map = minetest.get_perlin_map({
-        offset = 0,
-        scale = 1,
-        spread = {x = 1500, y = 1500, z = 1500},
-        seed = 2098,
-        octaves = 3,
-        persist = 0.5
-    }, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1}):get2dMap_flat({x = minp.x, y = minp.z})
-
-    local tropical_forest_map = minetest.get_perlin_map({
-        offset = 0,
-        scale = 1,
-        spread = {x = 1300, y = 1300, z = 1300},
-        seed = 3098,
-        octaves = 3,
-        persist = 0.5
-    }, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1}):get2dMap_flat({x = minp.x, y = minp.z})
-
-    local beach_map = minetest.get_perlin_map({
-        offset = 0,
-        scale = 1,
-        spread = {x = 1100, y = 1100, z = 1100},
-        seed = 4098,
-        octaves = 3,
-        persist = 0.5
-    }, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1}):get2dMap_flat({x = minp.x, y = minp.z})
-
-    local grassland_map = minetest.get_perlin_map({
-        offset = 0,
-        scale = 1,
-        spread = {x = 1400, y = 1400, z = 1400},
-        seed = 5098,
-        octaves = 3,
-        persist = 0.5
-    }, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1}):get2dMap_flat({x = minp.x, y = minp.z})
+    local heightmap = get_perlin_map({offset = 0, scale = 1, spread = {x = 300, y = 300, z = 300}, seed = 5349, octaves = 6, persist = 0.7}, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1})
+    local peakmap = get_perlin_map({offset = 0, scale = 1, spread = {x = 200, y = 200, z = 200}, seed = 12345, octaves = 3, persist = 0.5}, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1})
+    local plainmap = get_perlin_map({offset = 0, scale = 1, spread = {x = 1800, y = 1800, z = 1800}, seed = 6789, octaves = 0, persist = 0}, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1})
+    local terrain_type_map = get_perlin_map({offset = 0, scale = 1, spread = {x = 500, y = 500, z = 500}, seed = 7890, octaves = 1, persist = 0.5}, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1})
+    local desert_map = get_perlin_map({offset = 0, scale = 1, spread = {x = 1000, y = 1000, z = 1000}, seed = 8765, octaves = 3, persist = 0.5}, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1})
+    local forest_map = get_perlin_map({offset = 0, scale = 1, spread = {x = 800, y = 800, z = 800}, seed = 9876, octaves = 3, persist = 0.5}, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1})
+    local wetland_map = get_perlin_map({offset = 0, scale = 1, spread = {x = 1200, y = 1200, z = 1200}, seed = 1098, octaves = 3, persist = 0.5}, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1})
+    local snow_map = get_perlin_map({offset = 0, scale = 1, spread = {x = 1500, y = 1500, z = 1500}, seed = 2098, octaves = 3, persist = 0.5}, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1})
+    local tropical_forest_map = get_perlin_map({offset = 0, scale = 1, spread = {x = 1300, y = 1300, z = 1300}, seed = 3098, octaves = 3, persist = 0.5}, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1})
+    local beach_map = get_perlin_map({offset = 0, scale = 1, spread = {x = 1100, y = 1100, z = 1100}, seed = 4098, octaves = 3, persist = 0.5}, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1})
+    local grassland_map = get_perlin_map({offset = 0, scale = 1, spread = {x = 1400, y = 1400, z = 1400}, seed = 5098, octaves = 3, persist = 0.5}, {x = maxp.x - minp.x + 1, y = maxp.z - minp.z + 1})
 
     local c_dirt_with_grass = minetest.get_content_id("default:dirt_with_grass")
     local c_dirt = minetest.get_content_id("default:dirt")
@@ -116,7 +33,6 @@ minetest.register_on_generated(function(minp, maxp, seed)
     local c_desert_sand = minetest.get_content_id("default:desert_sand")
     local c_desert_stone = minetest.get_content_id("default:desert_stone")
     local c_forest_tree = minetest.get_content_id("default:tree")
-    local c_wetland_water = minetest.get_content_id("default:water_source")
     local c_tropical_tree = minetest.get_content_id("default:jungletree")
     local c_beach_sand = minetest.get_content_id("default:sand")
     local c_grassland_grass = minetest.get_content_id("default:dirt_with_grass")
@@ -134,7 +50,6 @@ minetest.register_on_generated(function(minp, maxp, seed)
             local terrain_type = terrain_type_map[ni]
             local desert_type = desert_map[ni]
             local forest_type = forest_map[ni]
-            local wetland_type = wetland_map[ni]
             local snow_type = snow_map[ni]
             local tropical_forest_type = tropical_forest_map[ni]
             local beach_type = beach_map[ni]
@@ -216,7 +131,6 @@ minetest.register_on_generated(function(minp, maxp, seed)
                     data[vi] = c_grassland_grass
                 end
 
-                -- Place dirt_with_grass or snow above stone if there is air
                 if y > 0 and y < maxp.y and data[vi] == c_stone then
                     local vi_above = area:index(x, y + 1, z)
                     if data[vi_above] == minetest.CONTENT_AIR then
